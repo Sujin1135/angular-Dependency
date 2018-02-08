@@ -1,0 +1,74 @@
+.parallax-container {
+    height: 4em;
+  }
+
+.text-ex {
+  font-size: 1.2em;
+}
+
+.header {
+  font-size: 3em;
+  font-family: 'Josefin Slab', serif;
+}
+
+.code {
+  color: rgba(255,127,0,1.0);
+}
+
+.chapter {
+  margin-top: 6em;
+  margin-bottom: 7em;
+}
+
+.ex-img {
+  width: 30em;
+  height: 30em;
+}
+
+@import url(//fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+
+.nanumpenscript * {
+ font-family: 'Nanum Pen Script', cursive;
+}
+
+/** 이하는 공통 **/
+.normal {
+ font-style: normal;
+}
+
+.w250 {
+ font-weight: 250;
+}
+
+.w300 {
+ font-weight: 300;
+}
+
+.w350 {
+ font-weight: 350;
+}
+
+.w400 {
+ font-weight: 400;
+}
+
+.w500 {
+ font-weight: 500;
+}
+
+.w700 {
+ font-weight: 700;
+}
+
+.w800 {
+ font-weight: 800;
+}
+
+.w900 {
+ font-weight: 900;
+}
+
+li span {
+ line-height: 1.8;
+ font-size: 1.3em;
+}

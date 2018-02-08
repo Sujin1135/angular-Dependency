@@ -1,27 +1,10 @@
 # Study
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.2.
+앵귤러를 이용하여 간단한 SPA를 만들었습니다. <br />
+이 홈페이지의 목적은 앵귤러의 인젝터와 프로바이더 의존성 주입에 관한 설명을 하기 위해 만들었습니다.
 
-## Development server
+## Code Review
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+기본 HTML 문법을 이용하여 코드를 짯으며 navigation의 각각의 주제를 클릭하여 주소가 변경될 때마다 <br />
+페이지 전체가 렌더링 되는게 아니라 부분만 렌더링 되게 라우터의 기능을 이용하였습니다.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

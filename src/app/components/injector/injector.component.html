@@ -1,0 +1,31 @@
+<div class="section white">
+  <div class="row container">
+    <h2 class="header">
+      4.5 인젝터의 계층 구조
+    </h2>
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">
+          4.5.1 인젝터의 계층 구조
+        </h3>
+      </span>
+      <p class="text-ex">
+        Angular는 루트 인젝터를사용해서 애플리케이션 객체를 생성하고 이 인젝터는 생성된 애플리케이션의 구조를 따라가며 컴포넌트 계층을 만들고 컴포넌트 인젝터를 생성한다.
+        즉, 부모 컴포넌트의 인젝터는 자식 컴포넌트마다 인젝터를 생성한다.
+      </p>
+      <div>
+          <img src="/assets/img/Kaka.jpeg" alt="injector" class="ex-img">
+          <p class="code">
+            그림 4.5.1 인젝터의 계층 구조
+          </p>
+      </div>
+      <p class="text-ex">
+        - 컴포넌트의 템플릿 마크업은 독립적인 Shadow DOM에 엘리먼트를 구성하여 각 인젝터를 갖고있다.
+      </p>
+      <p class="text-ex">
+        - 컴포넌트가 생성될 때 의존성으로 주입되는 객체가 있으면 컴포넌트의 인젝터는 컴포넌트 계층에 프로바이더가 등록되어 있는지 찾고
+        없으면 위의 그림의 계층처럼 부모를 따라가며 프로바이더를 찾는다.
+      </p>
+    </div>
+  </div>
+</div>

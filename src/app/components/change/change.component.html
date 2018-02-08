@@ -1,0 +1,243 @@
+<div class="section white">
+  <div class="row container">
+    <h2 class="header">
+      4.4 프로바이더 변경하기
+    </h2>
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">
+          4.4.1 프로바이더 변경
+        </h3>
+      </span>
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+              import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { NgModule, Component } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser'
+
+class Product {
+  constructor (public title : string) {}
+}
+
+class ProductService {
+  getProduct () : Product {
+    // 실제 상품 정보를 가져오도록 HTTP 요청을 보내는 부분은 여기에 작성한다.
+    return new Product('iPhone 8');
+  }
+}
+
+class MockProductService implements ProductService { //ProductService를 인터페이스로 사용한 클래스를 작성한다.
+  getProduct () : Product {
+    return new Product('Galaxy S8');
+  }
+}
+
+@Component({
+  selector : 'product1',
+  template : '{ product.title }'
+})
+
+class Product1Component {
+  product : Product;
+
+  /* Product1Component의 생성자에 애플리케이션의 providers에 정의되어 있는 서비스를 의존성으로 주입받는다. */
+  constructor (private productService : ProductService) {
+    this.product = productService.getProduct();
+  }
+}
+
+@Component({
+  selector : 'product2',
+  template : '{ product.title }',
+  /* 해당 컴포넌트에서는 ProductService타입의 인스턴스를 생성하는 클래스를 MockProductService로 지정한다. */
+  providers : [{ provide : ProductService, useClass : MockProductService }] //하위 계층에서의 프로바이더 오버라이딩
+})
+class Product2Component {
+  product : Product;
+
+  constructor (private productService : ProductService) { //MockProductService클래스를 의존성 주입받는다.
+    this.product = productService.getProduct();
+  }
+}
+
+@Component({
+  selector : 'app',
+  template : `
+    <h2>A root component hosts two products<br>
+      provided by different services</h2>
+    <product1></product1>
+    <br>
+    <product2></product2>
+  `
+})
+class AppComponent {}
+
+@NgModule({
+  imports : [BrowserModule],
+  providers : [ProductService], //애플리케이션 계층 인젝터에 ProductService 프로바이더를 등록한다.
+  declarations : [AppComponent, Product1Component, Product2Component],
+  bootstrap : [AppComponent]
+})
+class AppModule {}
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+        </textarea>
+        <p class="code">
+          코드 4.4.1
+        </p>
+        <div class="row">
+          <div class="col s12 m6">
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <span class="card-title">인터페이스 역할을 하는 클래스</span>
+                <p>
+                  Typescript에서 인터페이스는 객체가 구현해야 할 내용을 미리 지정해 두고 이 규격을 따르도록
+                  강제하는 방법이다. Java와 언뜻 비슷하지만 Java와는 다르게 Typescript에서는 클래스도 인터페이스로
+                  사용 할 수 있다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
+    </div>
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">
+          4.4.2 프로바이더에 useFactory와 useValue 사용하기
+        </h3>
+      </span>
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+          import { NgModule, Component } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+class Product {
+  constructor (public title : string) {}
+}
+
+class ProductService {
+  getProduct () : Product {
+    // 실제 상품 정보를 가져오도록 HTTP 요청을 보내는 부분은 여기에 작성한다.
+    return new Product('iPhone 8');
+  }
+}
+
+class MockProductService implements ProductService {
+  getProduct () : Product {
+    return new Product('Galaxy S8');
+  }
+}
+
+@Component({
+  selector : 'product1',
+  template : '{ product.title }'
+})
+class Product1Component {
+  product : Product;
+
+  constructor (productService : ProductService) {
+    this.product = productService.getProduct();
+  }
+}
+
+@Component({
+  selector : 'product2',
+
+  providers : [{
+    provide : ProductService,
+    /* useFactory는 2개의 인자를 지정한다 첫번째로 펙토리로 사용할 함수, 두번째로는 의존성으로 사용할 객체를 지정한다. */
+    useFactory : (isDev) => {
+      if (isDev) { //사용하는 의존성 객체의 값이 true면 MockProductService를 false면 ProductService를 의존성으로 받아서 사용한다.
+        return new MockProductService();
+      } else {
+        return new ProductService();
+      }
+    }, deps : ['IS_DEV_ENVIRONMENT'] //deps는 팩토리 함수에서 사용하는 의존성 객체를 가르킨다.
+  }],
+
+  template : '{ product.title }'
+})
+class Product2Component {
+  product : Product;
+
+  constructor (productService : ProductService) {
+    this.product = productService.getProduct();
+  }
+}
+
+@Component({
+  selector : 'app',
+  template : `
+        <h2>A root component hosts two products<br> provided by different services</h2>
+        <product1></product1> //Product1Component
+        <br>
+        <product2></product2> //Product2Component
+    `
+})
+class AppComponent {}
+
+@NgModule({
+  imports : [BrowserModule],
+  declarations : [AppComponent, Product1Component, Product2Component],
+  /* 애플리케이션에 'IS_DEV_ENVIRONMENT'라는 토큰을 등록하고 이 값을(useValue)를 true로 설정하였다. */
+  providers : [ProductService,
+    { provide : 'IS_DEV_ENVIRONMENT', useValue : true }],
+  bootstrap : [AppComponent]
+})
+class AppModule {}
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+        </textarea>
+        <p class="code">
+          코드 4.4.2
+        </p>
+      </span>
+    </div>
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">
+          4.4.2 불투명 토큰(Opaque Token) 사용하기
+        </h3>
+      </span>
+      <p class="text-ex">
+        코드 4.4.2 처럼 'IS_DEV_ENVIRONMENT' 과 같은 문자열을 의존성으로 주입하여 사용하면
+        이 문자열이 다른 프로바이더명과 겹치면 문제가 생길 수 있다. 이러한 문제를 해결하기 위하여
+        문자열을 그대로 사용하는 대신 불투명 토큰(Opaque Token)을 사용하는 것이 좋다.
+      </p>
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+            import { Component, OpaqueToken, Inject, NgModule } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { BrowserModule } from '@angular/platform-browser';
+
+export const BackendUrl = new OpaqueToken('BackendUrl'); //'BackendUrl'을 OpaqueToken클래스의 인스턴스로 변환한다.
+
+@Component({
+  selector : 'app',
+  template : 'URL : { url }'
+})
+class AppComponent {
+  constructor (@Inject(BackendUrl) public url) {
+  }
+}
+
+@NgModule({
+  imports : [BrowserModule],
+  declarations : [AppComponent],
+  /* OpaqueToken클래스의 인스턴스를 프로바이더로 등록한다. */
+  providers : [{ provide : BackendUrl, useValue : 'myQAserver.com' }],
+  bootstrap : [AppComponent]
+})
+class AppModule {}
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+        </textarea>
+        <p class="code">
+          코드 4.4.3 불투명 토큰(Opaque Token)
+        </p>
+      </span>
+    </div>
+  </div>
+</div>

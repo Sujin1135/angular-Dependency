@@ -1,0 +1,109 @@
+<div class="section white">
+  <div class="row container">
+    <h2 class="header">4.2 인젝터와 프로바이더</h2>
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">4.2.1 인젝터와 프로바이더</h3>
+      </span>
+      <p class="text-ex">
+        Angular 프레임워크는 인젝터와 프로바이더로 의존성 주입 패턴을 구현한다.
+      </p>
+      <p class="text-ex">
+        - 루트 인젝터(root injector) : 전체 모듈에서 사용하며 컴포넌트에서 객체나 기본형 변수,
+        컴포넌트 서비스를 주입받으면 컴포넌트 안에도 인젝터를 따로 만든다.
+      </p>
+      <p class="text-ex">
+        - 프로바이더(provider) : 인젝터가 무엇을 주입해야 할지 알려주기 위해 사용하며 프로바이더로
+        지정된 객체나 값을 인젝터가 생성해서 원하는 컴포넌트에 주입하는데 사용된다.
+      </p>
+
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+          @NgModule({
+            ...
+      providers : [ provide : ProductService, useClass : ProductService ]
+  });
+        </textarea>
+        <p class="code">
+          코드 4.2.1 모듈 전체 providers 선언
+        </p>
+      </span>
+
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+          @NgModule({
+            ...
+      providers : [ProductService]
+  })
+        </textarea>
+        <p class="code">
+          코드 4.2.2 토큰 이름과 클래스 이름이 같을 경우
+        </p>
+      </span>
+
+      <p class="text-ex">
+        프로바이더는 컴포넌트 안에서도 선언이 가능하고 애플리케이션 모듈에도 선언이 가능하다.
+        프로바이더를 컴포넌트에서만 사용할 것인지 모듈 전체에 두루 사용할 것인지에 따라 프로바이더의 선언 위치를 결정하면 된다.
+      </p>
+    </div>
+
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">
+          4.2.2 TypeScript와 ES6의 의존성 주입
+        </h3>
+      </span>
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+          constructor(productService : ProductService)
+        </textarea>
+        <p class="code">
+          코드 4.2.3 TypeScript 의존성 주입
+        </p>
+      </span>
+      <p class="text-ex">
+       TypeScript는 컴파일러 옵션에 emitDecoratorMetaData 값을 true로 설정했기 때문에, 주입되는 객채에 대한 메타데이터가 필요하면 
+       Angular가 자동으로 생성한다.
+      </p>
+
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+          constructor(@Injector(ProductService) productService)
+        </textarea>
+        <p class="code">
+          코드 4.2.4 ES6 의존성 주입
+        </p>
+      </span>
+      <p class="text-ex">
+        ES6 문법으로 작성할 경우 @Inject 어노테이션을 사용해서 명시적으로 타입을 지정해 주어야 한다.
+      </p>
+    </div>
+
+    <div class="chapter">
+      <span class="nanumpenscript">
+        <h3 class="nomal w400">
+          4.2.3 프로바이더 등록하기
+        </h3>
+      </span>
+      <span>
+        <textarea highlight-js [options]="{}" [lang]="'typescript'">
+          /* ProductService 토큰이 의존성으로 주입될 때 MockProductService 클래스의 인스턴스를 생성하라 */
+[{ provide : ProductService, useClass : MockProductService }]
+        </textarea>
+        <p class="code">
+          코드 4.2.5 프로바이더
+        </p>
+      </span>
+      <p class="text-ex">
+        프로바이더는 컴포넌트나 모듈에 provide프로퍼티가 있는 객체를 모아 배열로 선언하여 provider 프로퍼티 값으로
+        지정한다.
+      </p>
+      <p class="text-ex">
+        - providers : 프로바이더를 등록하는 어노테이션 프로퍼티
+      </p>
+      <p class="text-ex">
+        - provider : 개별 프로바이더에 사용하는 프로퍼티
+      </p>
+    </div>
+  </div>
+</div>

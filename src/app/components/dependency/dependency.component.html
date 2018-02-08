@@ -1,0 +1,121 @@
+<div class="section white">
+  <div class="row container">
+    <h2 class="header">4.1 의존성 주입과 제어권 역전</h2>
+    <div class="chapter">
+        <span class="nanumpenscript">
+            <h3 class="nomal w400">4.1.1 의존성 주입 패턴</h3>
+        </span>
+        <span>
+            <textarea highlight-js [options]="{}" [lang]="'typescript'">
+                const product = new Product();
+    
+    createShipment(product);
+            </textarea>
+            <p class="code">
+                코드4.1.1 기본적인 인스턴스 생성 방법
+            </p>
+        </span>
+    
+        <span>
+            <textarea highlight-js [options]="{}" [lang]="'typescript'">
+                product : Product;
+    
+    constructor(productService : ProductService){ //생성자
+        this.product = productService.getProduct();
+    }
+            </textarea>
+            <p class="code">
+                코드4.1.2 의존성 주입 방식
+            </p>
+        </span>
+        
+        <p class="grey-text text-darken-3 lighten-3 text-ex">
+            위의 코드가 원래 클래스의 인스턴스 생성방법이다. 하지만 인스턴스의 생성 비용이 크다거나
+            여러 곳에서 한 객체를 사용할 경우 외부에서 미리 정의해놓고 각각 컴포넌트에선
+            외부에서 어떻게 만들었는지는 신경쓰지 않고 받아오기만 함으로써 이 객체를 사용할 수 있게 된다.
+        </p>
+    </div>
+    
+    <div class="chapter">
+        <span class="nanumpenscript">
+            <h3 class="nomal w400">4.1.2 의존성 주입의 장점</h3>
+        </span>
+        <span>
+            <textarea highlight-js [options]="{}" [lang]="'typescript'">
+                    @Component({
+        /* providers: 의존성으로 주입될 객체를 어떻게 생성하는지 Angular에게 알려주기 위해 사용 */
+        providers : [ProductService] //[{ provide : ProductService, useClass : ProductService }]
+    })
+        
+    class ProductComponent {
+        product : Product;
+
+        constructor(productService : ProductService) {
+            this.product = productService.getProdudct();
+        }
+    }
+            </textarea>
+            <p class="code">
+                코드4.1.3 의존성 주입의 장점
+            </p>
+        
+            <div class="chip">
+                원하는 코드만 테스트할 수 있다
+            </div>
+        
+            <div class="chip">
+                재사용성이 높은 코드 작성가능
+            </div>
+        </span>
+        
+        <p class="text-ex">
+            만일 ProductComponent가 ProductService에서 상품 정보를 의존성 주입 패턴 없이 가져온다고 하면
+            어떤 방법을 사용하더라도 ProductService클래스를 어떻게 생성하는지 알아야 하지만 의존성 주입 패턴을 사용하면
+            그럴 필요가 없다.
+        </p>
+    </div>
+    
+    <div class="chapter">
+        <span class="nanumpenscript">
+            <h3 class="nomal w400">4.1.3 제어권 역전 패턴</h3>
+        </span>
+        <p class="text-ex">
+            애플리케이션이 프레임워크에 있는 API를 직접 사용하는 대신 프레임워크가 객체를 만들어서 애플리케이션에 전달하는 방식으로
+            의존성 주입 패턴도 제어권 역전 패턴 중 하나이다. Angular프레임워크는 제어권을 갖는 주체이고 컴포넌트의 선언부에서 요구하는
+            객체를 직접 만들어 전달한다. (코드4.1.2 참조)
+        </p>
+        <p class="text-ex">
+            ProductComponent의 @Component 어노테이션에 providers 프로퍼티를 추가하면 Angular의 의존성 주입 모듈은
+            해당 객체를 초기화 시키는 방법을 알게되고, 해당 객체의 인스턴스는 지정된 프로바이더를 통해 만들어진다.
+            위의 코드 4.1.4처럼 providers를 정의하면 ProductComponent 안에서는 ProductService를 따로 생성할 필요 없이
+            ProductService 인스턴스를 사용할 수 있다.
+        </p>
+        <span>
+            <textarea highlight-js [options]="{}" [lang]="'typescript'">
+                providers : [{ provide : ProductService, useClass : AnotherProductService }]
+            </textarea>
+            <p class="code">
+                코드 4.1.4 제어권 역전 패턴과 providers
+            </p>
+            
+            <div class="chip">
+                코드의 결합도를 낮춘다
+            </div>
+        </span>
+        <p class="text-ex">
+            다른 애플리 케이션에서 ProductComponent를 재사용 하면서 ProductService타입만 다른 클래스로 사용하고 싶다면
+            코드 4.1.4와 같이 useClass프로퍼티를 따로 설정해주어 프로바이더만 변경하면 된다.
+            그러면 Angular는 해당 useClass프로퍼티에 지정된 객체의 인스턴스를 생성하지만
+            ProductService 타입을 사용하는 코드는 여전히 잘 동작하게 될 것이다.
+            의존성 패턴의 이러한 기능 덕분에 Service와의 낮은 결합도를 가지게 됨으로써 재사용성이 극대화 되었다.
+        </p>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('.parallax').parallax();
+  });
+</script>
